@@ -21,6 +21,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     env:
       CSC_IDENTITY_AUTO_DISCOVERY: "false"
+      PRODUCT: "Reading List"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -33,6 +34,43 @@ jobs:
         working-directory: ganger-release
       - run: npx electron-builder ${{ matrix.flag }} --publish never
         working-directory: ganger-release
+      # Each program is opened before it is attached: one that will not stay open is not released.
+      - name: Open it (Linux)
+        if: runner.os == 'Linux'
+        working-directory: ganger-release/out
+        run: |
+          ls *.AppImage >/dev/null 2>&1 || exit 0
+          sudo apt-get update -q && (sudo apt-get install -y -q xvfb libfuse2t64 || sudo apt-get install -y -q xvfb libfuse2)
+          for f in *.AppImage; do
+            chmod +x "$f"
+            set +e; timeout 20 xvfb-run -a "./$f" --no-sandbox; code=$?; set -e
+            [ "$code" -eq 124 ] || { echo "$f closed by itself (exit $code)."; exit 1; }
+          done
+      - name: Open it (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        working-directory: ganger-release/out
+        run: |
+          $setup = Get-ChildItem *Setup*.exe | Select-Object -First 1
+          if ($setup) {
+            Start-Process $setup.FullName -ArgumentList '/S' -Wait
+            $exe = Get-ChildItem "$env:LOCALAPPDATA\Programs" -Recurse -Filter "$env:PRODUCT.exe" | Select-Object -First 1
+          } else { $exe = Get-ChildItem *.exe | Select-Object -First 1 }
+          if (-not $exe) { throw "No program was installed to open." }
+          $p = Start-Process $exe.FullName -PassThru
+          Start-Sleep 15
+          if ($p.HasExited) { throw "$($exe.Name) closed by itself (exit $($p.ExitCode))." }
+          Stop-Process -Id $p.Id -Force
+      - name: Open it (Mac)
+        if: runner.os == 'macOS'
+        working-directory: ganger-release/out
+        run: |
+          dmg=$(ls *arm64.dmg | head -1)
+          hdiutil attach "$dmg" -mountpoint /tmp/app -nobrowse -quiet
+          "/tmp/app/$PRODUCT.app/Contents/MacOS/$PRODUCT" & pid=$!
+          sleep 15
+          kill -0 "$pid" || { echo "It closed by itself."; exit 1; }
+          kill "$pid"
       - uses: softprops/action-gh-release@v2
         with:
           files: |

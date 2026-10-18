@@ -1,10 +1,10 @@
 {
   "name": "desktop-keeping-reading-12a8c0",
-  "productName": "desktop-keeping-reading",
-  "version": "1.0.0",
-  "description": "desktop-keeping-reading, made with Ganger.",
+  "productName": "Reading List",
+  "version": "1.0.1",
+  "description": "Reading List, made with Ganger.",
   "author": {
-    "name": "desktop-keeping-reading"
+    "name": "Reading List"
   },
   "main": "main.js",
   "private": true,
@@ -14,7 +14,7 @@
   },
   "build": {
     "appId": "app.ganger.desktopkeepingreading12a8c0",
-    "productName": "desktop-keeping-reading",
+    "productName": "Reading List",
     "directories": {
       "output": "out"
     },
@@ -30,7 +30,13 @@
     },
     "mac": {
       "target": [
-        "dmg"
+        {
+          "target": "dmg",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
       ],
       "category": "public.app-category.productivity"
     },
