@@ -1,0 +1,93 @@
+{
+  "version": 1,
+  "purpose": "A desktop app for keeping a simple reading list of books",
+  "principles": [
+    {
+      "text": "Built for: me, on my laptop",
+      "from": "audience"
+    },
+    {
+      "text": "Nobody signs in: everything is open to whoever has the app.",
+      "from": "auth"
+    },
+    {
+      "text": "It works fully with no connection; the network is a bonus.",
+      "from": "connectivity"
+    }
+  ],
+  "mustHaves": [
+    {
+      "id": "MH-1",
+      "text": "add a book with its title and author",
+      "acceptance": [
+        "A person using the app can: add a book with its title and author",
+        "Ganger's coverage check finds the file and function that do it, in an app that builds, starts and has no placeholders left."
+      ]
+    },
+    {
+      "id": "MH-2",
+      "text": "mark a book as read",
+      "acceptance": [
+        "A person using the app can: mark a book as read",
+        "Ganger's coverage check finds the file and function that do it, in an app that builds, starts and has no placeholders left."
+      ]
+    }
+  ],
+  "nonGoals": [],
+  "stack": {
+    "needsBackend": false,
+    "gate": "Desktop software keeps its work on the computer it runs on, so nothing needs a server.",
+    "preset": "Desktop program",
+    "pieces": [
+      {
+        "slot": "framework",
+        "name": "Electron + Vite + React",
+        "by": "preset"
+      },
+      {
+        "slot": "styling",
+        "name": "Tailwind CSS",
+        "by": "preset"
+      },
+      {
+        "slot": "ui",
+        "name": "shadcn/ui",
+        "by": "preset"
+      },
+      {
+        "slot": "data",
+        "name": "IndexedDB (Dexie)",
+        "by": "preset"
+      },
+      {
+        "slot": "auth",
+        "name": "none",
+        "by": "preset"
+      },
+      {
+        "slot": "realtime",
+        "name": "none",
+        "by": "preset"
+      },
+      {
+        "slot": "deploy",
+        "name": "desktop program (Export as a desktop app)",
+        "by": "preset"
+      },
+      {
+        "slot": "integrations",
+        "name": "none",
+        "by": "preset"
+      }
+    ]
+  },
+  "openQuestions": [],
+  "amendments": [
+    {
+      "version": 1,
+      "at": "2026-10-18T00:04:16.654Z",
+      "by": "Ganger",
+      "reason": "Written from the brief and the stack decision, before any journeyman ran."
+    }
+  ]
+}

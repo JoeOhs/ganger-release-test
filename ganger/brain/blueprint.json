@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "cards": [
+    {
+      "id": "add-a-book-with-its-title-and-author",
+      "title": "Add a book",
+      "aspect": "screen",
+      "serves": [
+        "add a book with its title and author"
+      ],
+      "files": [
+        {
+          "path": "src/screens/AddBook.tsx",
+          "symbol": "AddBookScreen"
+        }
+      ],
+      "state": "verified",
+      "round": 1,
+      "role": "integration"
+    },
+    {
+      "id": "mark-a-book-as-read",
+      "title": "Reading list",
+      "aspect": "screen",
+      "serves": [
+        "mark a book as read"
+      ],
+      "files": [
+        {
+          "path": "src/screens/MarkBookAsRead.tsx",
+          "symbol": "MarkBookAsReadScreen"
+        }
+      ],
+      "state": "verified",
+      "round": 1,
+      "role": "integration"
+    }
+  ],
+  "edges": []
+}
