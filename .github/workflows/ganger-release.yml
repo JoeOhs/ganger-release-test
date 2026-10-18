@@ -4,6 +4,9 @@ name: Ganger release
 on:
   release:
     types: [published]
+  # Started by Ganger to save a release to a folder: compiled the same way, kept as the run's
+  # artifacts instead of attached to a release, then downloaded.
+  workflow_dispatch:
 permissions:
   contents: write
 jobs:
@@ -72,8 +75,19 @@ jobs:
           kill -0 "$pid" || { echo "It closed by itself."; exit 1; }
           kill "$pid"
       - uses: softprops/action-gh-release@v2
+        if: github.event_name == 'release'
         with:
           files: |
+            ganger-release/out/*.exe
+            ganger-release/out/*.dmg
+            ganger-release/out/*.AppImage
+            ganger-release/out/*.deb
+      - uses: actions/upload-artifact@v4
+        if: github.event_name == 'workflow_dispatch'
+        with:
+          name: program-${{ matrix.os }}
+          retention-days: 3
+          path: |
             ganger-release/out/*.exe
             ganger-release/out/*.dmg
             ganger-release/out/*.AppImage
