@@ -1,0 +1,42 @@
+# Written by Ganger: compiles this app for each system chosen when the release was made,
+# and attaches the programs to the release. Unsigned until signing is set up.
+name: Ganger release
+on:
+  release:
+    types: [published]
+permissions:
+  contents: write
+jobs:
+  compile:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            flag: --win
+          - os: macos-latest
+            flag: --mac
+          - os: ubuntu-latest
+            flag: --linux
+    runs-on: ${{ matrix.os }}
+    env:
+      CSC_IDENTITY_AUTO_DISCOVERY: "false"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install --no-audit --no-fund
+      - run: npm run build
+      - run: node ganger-release/stage.cjs
+      - run: npm install --no-audit --no-fund
+        working-directory: ganger-release
+      - run: npx electron-builder ${{ matrix.flag }} --publish never
+        working-directory: ganger-release
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            ganger-release/out/*.exe
+            ganger-release/out/*.dmg
+            ganger-release/out/*.AppImage
+            ganger-release/out/*.deb

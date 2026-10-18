@@ -1,0 +1,44 @@
+{
+  "name": "desktop-keeping-reading-12a8c0",
+  "productName": "desktop-keeping-reading",
+  "version": "1.0.0",
+  "description": "desktop-keeping-reading, made with Ganger.",
+  "author": {
+    "name": "desktop-keeping-reading"
+  },
+  "main": "main.js",
+  "private": true,
+  "devDependencies": {
+    "electron": "43.4.0",
+    "electron-builder": "26.0.12"
+  },
+  "build": {
+    "appId": "app.ganger.desktopkeepingreading12a8c0",
+    "productName": "desktop-keeping-reading",
+    "directories": {
+      "output": "out"
+    },
+    "files": [
+      "main.js",
+      "package.json",
+      "site/**"
+    ],
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    },
+    "mac": {
+      "target": [
+        "dmg"
+      ],
+      "category": "public.app-category.productivity"
+    },
+    "linux": {
+      "target": [
+        "AppImage"
+      ],
+      "category": "Utility"
+    }
+  }
+}
